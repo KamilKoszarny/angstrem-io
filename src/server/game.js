@@ -1,6 +1,7 @@
 const Constants = require('../shared/constants');
 const Player = require('./player');
 const applyCollisions = require('./collisions');
+const ParticlesCreator = require('./particlesCreator');
 
 class Game {
   constructor() {
@@ -47,14 +48,17 @@ class Game {
       }
     });
     this.electrons = this.electrons.filter(electron => !electronsToRemove.includes(electron));
+    if (Object.keys(this.players).length > 0) {
+      const newElectron = ParticlesCreator.createElectron(this.electrons);
+      if (newElectron) {
+        this.electrons.push(newElectron);
+      }
+    }
 
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
       const player = this.players[playerID];
-      const newElectron = player.update(dt);
-      if (newElectron) {
-        this.electrons.push(newElectron);
-      }
+      player.update(dt);
     });
 
     // Apply collisions, give players score for hitting electrons

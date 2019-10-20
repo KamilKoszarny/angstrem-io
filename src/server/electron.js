@@ -3,9 +3,8 @@ const ObjectClass = require('./object');
 const Constants = require('../shared/constants');
 
 class Electron extends ObjectClass {
-  constructor(parentID, x, y, dir) {
+  constructor(x, y, dir) {
     super(shortid(), x, y, dir, Constants.ELECTRON_SPEED);
-    this.parentID = parentID;
   }
 
   // Returns true if the electron should be destroyed

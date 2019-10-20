@@ -56,8 +56,8 @@ function renderBackground(x, y) {
     backgroundY,
     MAP_SIZE / 2,
   );
-  backgroundGradient.addColorStop(0, 'black');
-  backgroundGradient.addColorStop(1, 'gray');
+  backgroundGradient.addColorStop(0, 'orange');
+  backgroundGradient.addColorStop(1, 'purple');
   context.fillStyle = backgroundGradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -91,7 +91,6 @@ function renderPlayer(me, player) {
     ARROW_SIZE,
     ARROW_SIZE,
   );
-  console.log(direction);
 
   context.restore();
 }
