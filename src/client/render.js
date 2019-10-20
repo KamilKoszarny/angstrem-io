@@ -6,7 +6,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, BULLET_RADIUS, MAP_SIZE } = Constants;
+const { PLAYER_RADIUS, PLAYER_MAX_HP, ELECTRON_RADIUS, MAP_SIZE } = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -24,7 +24,7 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
-  const { me, others, bullets } = getCurrentState();
+  const { me, others, electrons } = getCurrentState();
   if (!me) {
     return;
   }
@@ -37,8 +37,8 @@ function render() {
   context.lineWidth = 1;
   context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
 
-  // Draw all bullets
-  bullets.forEach(renderBullet.bind(null, me));
+  // Draw all electrons
+  electrons.forEach(renderElectron.bind(null, me));
 
   // Draw all players
   renderPlayer(me, me);
@@ -62,50 +62,48 @@ function renderBackground(x, y) {
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-// Renders a ship at the given coordinates
+// Renders players atoms at the given coordinates
 function renderPlayer(me, player) {
   const { x, y, direction } = player;
   const canvasX = canvas.width / 2 + x - me.x;
   const canvasY = canvas.height / 2 + y - me.y;
 
-  // Draw ship
+  // Draw player atom
   context.save();
   context.translate(canvasX, canvasY);
-  context.rotate(direction);
-  context.drawImage(
-    getAsset('ship.svg'),
-    -PLAYER_RADIUS,
-    -PLAYER_RADIUS,
-    PLAYER_RADIUS * 2,
-    PLAYER_RADIUS * 2,
-  );
-  context.restore();
+  context.lineWidth = 3;
+  context.fillStyle = 'blue';
+  context.beginPath();
+  context.arc(0, 0,
+    PLAYER_RADIUS,
+    0, 2 * Math.PI);
+  context.stroke();
+  context.fill();
 
-  // Draw health bar
-  context.fillStyle = 'white';
-  context.fillRect(
-    canvasX - PLAYER_RADIUS,
-    canvasY + PLAYER_RADIUS + 8,
-    PLAYER_RADIUS * 2,
-    2,
+  // Draw player direction
+  context.rotate(direction);
+  const ARROW_DIST = 6;
+  const ARROW_SIZE = PLAYER_RADIUS / 2;
+  context.drawImage(
+    getAsset('arrow.svg'),
+    -1 * ARROW_SIZE / 2,
+    -1 * (PLAYER_RADIUS + ARROW_DIST) - ARROW_SIZE / 2,
+    ARROW_SIZE,
+    ARROW_SIZE,
   );
-  context.fillStyle = 'red';
-  context.fillRect(
-    canvasX - PLAYER_RADIUS + PLAYER_RADIUS * 2 * player.hp / PLAYER_MAX_HP,
-    canvasY + PLAYER_RADIUS + 8,
-    PLAYER_RADIUS * 2 * (1 - player.hp / PLAYER_MAX_HP),
-    2,
-  );
+  console.log(direction);
+
+  context.restore();
 }
 
-function renderBullet(me, bullet) {
-  const { x, y } = bullet;
+function renderElectron(me, electron) {
+  const { x, y } = electron;
   context.drawImage(
-    getAsset('bullet.svg'),
-    canvas.width / 2 + x - me.x - BULLET_RADIUS,
-    canvas.height / 2 + y - me.y - BULLET_RADIUS,
-    BULLET_RADIUS * 2,
-    BULLET_RADIUS * 2,
+    getAsset('electron.svg'),
+    canvas.width / 2 + x - me.x - ELECTRON_RADIUS,
+    canvas.height / 2 + y - me.y - ELECTRON_RADIUS,
+    ELECTRON_RADIUS * 2,
+    ELECTRON_RADIUS * 2,
   );
 }
 

@@ -6,7 +6,7 @@ class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
-    this.bullets = [];
+    this.electrons = [];
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
@@ -38,33 +38,33 @@ class Game {
     const dt = (now - this.lastUpdateTime) / 1000;
     this.lastUpdateTime = now;
 
-    // Update each bullet
-    const bulletsToRemove = [];
-    this.bullets.forEach(bullet => {
-      if (bullet.update(dt)) {
-        // Destroy this bullet
-        bulletsToRemove.push(bullet);
+    // Update each electron
+    const electronsToRemove = [];
+    this.electrons.forEach(electron => {
+      if (electron.update(dt)) {
+        // Destroy this electron
+        electronsToRemove.push(electron);
       }
     });
-    this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
+    this.electrons = this.electrons.filter(electron => !electronsToRemove.includes(electron));
 
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
       const player = this.players[playerID];
-      const newBullet = player.update(dt);
-      if (newBullet) {
-        this.bullets.push(newBullet);
+      const newElectron = player.update(dt);
+      if (newElectron) {
+        this.electrons.push(newElectron);
       }
     });
 
-    // Apply collisions, give players score for hitting bullets
-    const destroyedBullets = applyCollisions(Object.values(this.players), this.bullets);
-    destroyedBullets.forEach(b => {
+    // Apply collisions, give players score for hitting electrons
+    const destroyedElectrons = applyCollisions(Object.values(this.players), this.electrons);
+    destroyedElectrons.forEach(b => {
       if (this.players[b.parentID]) {
         this.players[b.parentID].onDealtDamage();
       }
     });
-    this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
+    this.electrons = this.electrons.filter(electron => !destroyedElectrons.includes(electron));
 
     // Check if any players are dead
     Object.keys(this.sockets).forEach(playerID => {
@@ -101,7 +101,7 @@ class Game {
     const nearbyPlayers = Object.values(this.players).filter(
       p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
-    const nearbyBullets = this.bullets.filter(
+    const nearbyElectrons = this.electrons.filter(
       b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
 
@@ -109,7 +109,7 @@ class Game {
       t: Date.now(),
       me: player.serializeForUpdate(),
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
-      bullets: nearbyBullets.map(b => b.serializeForUpdate()),
+      electrons: nearbyElectrons.map(b => b.serializeForUpdate()),
       leaderboard,
     };
   }
