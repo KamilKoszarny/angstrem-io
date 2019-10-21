@@ -6,7 +6,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, ELECTRON_RADIUS, MAP_SIZE } = Constants;
+const { PLAYER_BASE_RADIUS, ELECTRON_RADIUS, MAP_SIZE } = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -69,13 +69,14 @@ function renderPlayer(me, player) {
   const canvasY = canvas.height / 2 + y - me.y;
 
   // Draw player atom
+  const playerRadius = PLAYER_BASE_RADIUS * (player.mass ** 0.33);
   context.save();
   context.translate(canvasX, canvasY);
   context.lineWidth = 3;
   context.fillStyle = 'blue';
   context.beginPath();
   context.arc(0, 0,
-    PLAYER_RADIUS,
+    playerRadius,
     0, 2 * Math.PI);
   context.stroke();
   context.fill();
@@ -83,11 +84,11 @@ function renderPlayer(me, player) {
   // Draw player direction
   context.rotate(direction);
   const ARROW_DIST = 6;
-  const ARROW_SIZE = PLAYER_RADIUS / 2;
+  const ARROW_SIZE = playerRadius / 2;
   context.drawImage(
     getAsset('arrow.svg'),
     -1 * ARROW_SIZE / 2,
-    -1 * (PLAYER_RADIUS + ARROW_DIST) - ARROW_SIZE / 2,
+    -1 * (playerRadius + ARROW_DIST) - ARROW_SIZE / 2,
     ARROW_SIZE,
     ARROW_SIZE,
   );

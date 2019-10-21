@@ -61,20 +61,15 @@ class Game {
       player.update(dt);
     });
 
-    // Apply collisions, give players score for hitting electrons
-    const destroyedElectrons = applyCollisions(Object.values(this.players), this.electrons);
-    destroyedElectrons.forEach(b => {
-      if (this.players[b.parentID]) {
-        this.players[b.parentID].onDealtDamage();
-      }
-    });
-    this.electrons = this.electrons.filter(electron => !destroyedElectrons.includes(electron));
+    // Apply collisions, give players score for catching electrons
+    const caughtElectrons = applyCollisions(Object.values(this.players), this.electrons);
+    this.electrons = this.electrons.filter(electron => !caughtElectrons.includes(electron));
 
     // Check if any players are dead
     Object.keys(this.sockets).forEach(playerID => {
       const socket = this.sockets[playerID];
       const player = this.players[playerID];
-      if (player.hp <= 0) {
+      if (player.mass <= 0) {
         socket.emit(Constants.MSG_TYPES.GAME_OVER);
         this.removePlayer(socket);
       }
