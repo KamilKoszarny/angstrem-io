@@ -8,6 +8,7 @@ class Game {
     this.sockets = {};
     this.players = {};
     this.electrons = [];
+    this.protons = [];
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
@@ -39,21 +40,8 @@ class Game {
     const dt = (now - this.lastUpdateTime) / 1000;
     this.lastUpdateTime = now;
 
-    // Update each electron
-    const electronsToRemove = [];
-    this.electrons.forEach(electron => {
-      if (electron.update(dt)) {
-        // Destroy this electron
-        electronsToRemove.push(electron);
-      }
-    });
-    this.electrons = this.electrons.filter(electron => !electronsToRemove.includes(electron));
-    if (Object.keys(this.players).length > 0) {
-      const newElectron = ParticlesCreator.createElectron(this.electrons);
-      if (newElectron) {
-        this.electrons.push(newElectron);
-      }
-    }
+    this.electrons = this.updateParticles(dt, this.electrons, 'electrons');
+    this.protons = this.updateParticles(dt, this.protons, 'protons');
 
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
@@ -87,6 +75,24 @@ class Game {
     } else {
       this.shouldSendUpdate = true;
     }
+  }
+
+  updateParticles(dt, particles, type) {
+    const particlesToRemove = [];
+    particles.forEach(particle => {
+      if (particle.update(dt)) {
+        // Destroy this electron
+        particlesToRemove.push(particle);
+      }
+    });
+    const updatedParticles = particles.filter(particle => !particlesToRemove.includes(particle));
+    if (Object.keys(this.players).length > 0) {
+      const newParticle = ParticlesCreator.createParticle(updatedParticles, type);
+      if (newParticle) {
+        updatedParticles.push(newParticle);
+      }
+    }
+    return updatedParticles;
   }
 
   getLeaderboard() {

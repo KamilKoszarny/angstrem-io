@@ -5,9 +5,10 @@ const { PLAYER_BASE_RADIUS } = Constants;
 
 class Player extends ObjectClass {
   constructor(id, username, x, y) {
-    super(id, x, y, Math.random() * 2 * Math.PI, Constants.PLAYER_SPEED);
+    super(id, x, y, Math.random() * 2 * Math.PI, Constants.PLAYER_BASE_SPEED);
     this.username = username;
     this.mass = 1;
+    this.charge = 0;
     this.score = 0;
   }
 
@@ -24,7 +25,7 @@ class Player extends ObjectClass {
 
   catchElectron() {
     this.score += Constants.SCORE_ELECTRON_CATCH;
-    this.mass += 1;
+    this.charge -= 1;
   }
 
   serializeForUpdate() {

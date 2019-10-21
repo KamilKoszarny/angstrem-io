@@ -9,10 +9,7 @@ function applyCollisions(players, electrons) {
     for (let j = 0; j < players.length; j++) {
       const electron = electrons[i];
       const player = players[j];
-      if (
-        electron.parentID !== player.id &&
-        player.distanceTo(electron) <= player.calcRadius() + Constants.ELECTRON_RADIUS
-      ) {
+      if (player.distanceTo(electron) <= player.calcRadius() + Constants.ELECTRON_RADIUS) {
         destroyedElectrons.push(electron);
         player.catchElectron();
         break;
