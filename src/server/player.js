@@ -23,9 +23,23 @@ class Player extends ObjectClass {
     return null;
   }
 
-  catchElectron() {
-    this.score += Constants.SCORE_ELECTRON_CATCH;
-    this.charge -= 1;
+  catchParticle(type) {
+    switch (type) {
+      case 'electrons':
+        this.score += Constants.SCORE_ELECTRON_CATCH;
+        this.charge -= 1;
+        break;
+      case 'protons':
+        this.score += Constants.SCORE_PROTON_CATCH;
+        this.charge += 1;
+        this.mass += 1;
+        break;
+      case 'neutrons':
+        this.score += Constants.SCORE_NEUTRON_CATCH;
+        this.mass += 1;
+        break;
+      default: break;
+    }
   }
 
   serializeForUpdate() {

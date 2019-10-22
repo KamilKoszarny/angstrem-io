@@ -1,21 +1,20 @@
 const Constants = require('../shared/constants');
 const Electron = require('./electron');
 const Proton = require('./proton');
-
-const ELECTRONS_MAX_COUNT = 50;
-const PROTONS_MAX_COUNT = 25;
+const Neutron = require('./neutron');
 
 class ParticlesCreator {
   static createParticle(particles, type) {
     switch (type) {
       case 'electrons': return this.createElectron(particles);
       case 'protons': return this.createProton(particles);
+      case 'neutrons': return this.createNeutron(particles);
       default: return null;
     }
   }
 
   static createElectron(electrons) {
-    if (electrons.length < ELECTRONS_MAX_COUNT) {
+    if (electrons.length < Constants.ELECTRONS_MAX_COUNT) {
       const { x, y, direction } = this.generateCoords();
       return new Electron(x, y, direction);
     }
@@ -23,9 +22,17 @@ class ParticlesCreator {
   }
 
   static createProton(protons) {
-    if (protons.length < PROTONS_MAX_COUNT) {
+    if (protons.length < Constants.PROTONS_MAX_COUNT) {
       const { x, y, direction } = this.generateCoords();
       return new Proton(x, y, direction);
+    }
+    return null;
+  }
+
+  static createNeutron(neurtons) {
+    if (neurtons.length < Constants.NEUTRON_MAX_SPEED) {
+      const { x, y, direction } = this.generateCoords();
+      return new Neutron(x, y, direction);
     }
     return null;
   }

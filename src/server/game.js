@@ -9,6 +9,7 @@ class Game {
     this.players = {};
     this.electrons = [];
     this.protons = [];
+    this.neutrons = [];
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
@@ -42,6 +43,7 @@ class Game {
 
     this.electrons = this.updateParticles(dt, this.electrons, 'electrons');
     this.protons = this.updateParticles(dt, this.protons, 'protons');
+    this.neutrons = this.updateParticles(dt, this.neutrons, 'neutrons');
 
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
@@ -49,9 +51,15 @@ class Game {
       player.update(dt);
     });
 
-    // Apply collisions, give players score for catching electrons
-    const caughtElectrons = applyCollisions(Object.values(this.players), this.electrons);
+    // Apply collisions, update players catching particles
+    const caughtElectrons = applyCollisions(Object.values(this.players), this.electrons, 'electrons');
     this.electrons = this.electrons.filter(electron => !caughtElectrons.includes(electron));
+
+    const caughtProtons = applyCollisions(Object.values(this.players), this.protons, 'protons');
+    this.protons = this.protons.filter(proton => !caughtProtons.includes(proton));
+
+    const caughtNeutrons = applyCollisions(Object.values(this.players), this.neutrons, 'neutrons');
+    this.neutrons = this.neutrons.filter(neutron => !caughtNeutrons.includes(neutron));
 
     // Check if any players are dead
     Object.keys(this.sockets).forEach(playerID => {
@@ -81,7 +89,6 @@ class Game {
     const particlesToRemove = [];
     particles.forEach(particle => {
       if (particle.update(dt)) {
-        // Destroy this electron
         particlesToRemove.push(particle);
       }
     });
@@ -107,14 +114,22 @@ class Game {
       p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
     const nearbyElectrons = this.electrons.filter(
-      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
+      e => e.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    );
+    const nearbyProtons = this.protons.filter(
+      p => p.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    );
+    const nearbyNeutrons = this.neutrons.filter(
+      n => n.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
 
     return {
       t: Date.now(),
       me: player.serializeForUpdate(),
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
-      electrons: nearbyElectrons.map(b => b.serializeForUpdate()),
+      electrons: nearbyElectrons.map(e => e.serializeForUpdate()),
+      protons: nearbyProtons.map(p => p.serializeForUpdate()),
+      neutrons: nearbyNeutrons.map(n => n.serializeForUpdate()),
       leaderboard,
     };
   }

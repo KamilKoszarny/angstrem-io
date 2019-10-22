@@ -1,22 +1,21 @@
-const Constants = require('../shared/constants');
+const Utils = require('../shared/utils');
 
 // Returns an array of electrons to be destroyed.
-function applyCollisions(players, electrons) {
-  const destroyedElectrons = [];
-  for (let i = 0; i < electrons.length; i++) {
-    // Look for a player (who didn't create the electron) to collide each electron with.
-    // As soon as we find one, break out of the loop to prevent double counting a electron.
+function applyCollisions(players, particles, type) {
+  const destroyedParticles = [];
+  for (let i = 0; i < particles.length; i++) {
     for (let j = 0; j < players.length; j++) {
-      const electron = electrons[i];
+      const particle = particles[i];
       const player = players[j];
-      if (player.distanceTo(electron) <= player.calcRadius() + Constants.ELECTRON_RADIUS) {
-        destroyedElectrons.push(electron);
-        player.catchElectron();
+      const particleRadius = Utils.getPaticleRadius(type);
+      if (player.distanceTo(particle) <= player.calcRadius() + particleRadius) {
+        destroyedParticles.push(particle);
+        player.catchParticle(type);
         break;
       }
     }
   }
-  return destroyedElectrons;
+  return destroyedParticles;
 }
 
 module.exports = applyCollisions;

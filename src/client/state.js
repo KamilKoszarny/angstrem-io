@@ -68,6 +68,8 @@ export function getCurrentState() {
       me: interpolateObject(baseUpdate.me, next.me, ratio),
       others: interpolateObjectArray(baseUpdate.others, next.others, ratio),
       electrons: interpolateObjectArray(baseUpdate.electrons, next.electrons, ratio),
+      protons: interpolateObjectArray(baseUpdate.protons, next.protons, ratio),
+      neutrons: interpolateObjectArray(baseUpdate.neutrons, next.neutrons, ratio),
     };
   }
 }

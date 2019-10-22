@@ -6,7 +6,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_BASE_RADIUS, ELECTRON_RADIUS, MAP_SIZE } = Constants;
+const { PLAYER_BASE_RADIUS, ELECTRON_RADIUS, PROTON_RADIUS, NEUTRON_RADIUS, MAP_SIZE } = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -24,7 +24,7 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
-  const { me, others, electrons } = getCurrentState();
+  const { me, others, electrons, protons, neutrons } = getCurrentState();
   if (!me) {
     return;
   }
@@ -37,8 +37,10 @@ function render() {
   context.lineWidth = 1;
   context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
 
-  // Draw all electrons
-  electrons.forEach(renderElectron.bind(null, me));
+  // Draw all particles
+  electrons.forEach(renderParticle.bind(null, me, ELECTRON_RADIUS));
+  protons.forEach(renderParticle.bind(null, me, PROTON_RADIUS));
+  neutrons.forEach(renderParticle.bind(null, me, NEUTRON_RADIUS));
 
   // Draw all players
   renderPlayer(me, me);
@@ -96,14 +98,14 @@ function renderPlayer(me, player) {
   context.restore();
 }
 
-function renderElectron(me, electron) {
-  const { x, y } = electron;
+function renderParticle(me, radius, particle) {
+  const { x, y } = particle;
   context.drawImage(
     getAsset('electron.svg'),
-    canvas.width / 2 + x - me.x - ELECTRON_RADIUS,
-    canvas.height / 2 + y - me.y - ELECTRON_RADIUS,
-    ELECTRON_RADIUS * 2,
-    ELECTRON_RADIUS * 2,
+    canvas.width / 2 + x - me.x - radius,
+    canvas.height / 2 + y - me.y - radius,
+    radius * 2,
+    radius * 2,
   );
 }
 
