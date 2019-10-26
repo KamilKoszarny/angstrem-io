@@ -77,7 +77,9 @@ class Game {
       Object.keys(this.sockets).forEach(playerID => {
         const socket = this.sockets[playerID];
         const player = this.players[playerID];
-        socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player, leaderboard));
+        const infoboard = this.getInfoboard(player);
+        socket.emit(Constants.MSG_TYPES.GAME_UPDATE,
+          this.createUpdate(player, leaderboard, infoboard));
       });
       this.shouldSendUpdate = false;
     } else {
@@ -109,7 +111,9 @@ class Game {
       .map(p => ({ username: p.username, score: Math.round(p.score) }));
   }
 
-  createUpdate(player, leaderboard) {
+  getInfoboard = player => ({ playerName: player.username });
+
+  createUpdate(player, leaderboard, infoboard) {
     const nearbyPlayers = Object.values(this.players).filter(
       p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
@@ -131,6 +135,7 @@ class Game {
       protons: nearbyProtons.map(p => p.serializeForUpdate()),
       neutrons: nearbyNeutrons.map(n => n.serializeForUpdate()),
       leaderboard,
+      infoboard,
     };
   }
 }

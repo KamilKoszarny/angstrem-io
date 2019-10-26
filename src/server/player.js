@@ -8,6 +8,7 @@ class Player extends ObjectClass {
     super(id, x, y, Math.random() * 2 * Math.PI, Constants.PLAYER_BASE_SPEED);
     this.username = username;
     this.mass = 1;
+    this.atomicNumber = 1;
     this.charge = 0;
     this.score = 0;
   }
@@ -33,6 +34,7 @@ class Player extends ObjectClass {
         this.score += Constants.SCORE_PROTON_CATCH;
         this.charge += 1;
         this.mass += 1;
+        this.atomicNumber += 1;
         break;
       case 'neutrons':
         this.score += Constants.SCORE_NEUTRON_CATCH;

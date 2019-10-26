@@ -38,9 +38,9 @@ function render() {
   context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
 
   // Draw all particles
-  electrons.forEach(renderParticle.bind(null, me, ELECTRON_RADIUS));
-  protons.forEach(renderParticle.bind(null, me, PROTON_RADIUS));
-  neutrons.forEach(renderParticle.bind(null, me, NEUTRON_RADIUS));
+  electrons.forEach(renderParticle.bind(null, me, ELECTRON_RADIUS, 'electron.svg'));
+  protons.forEach(renderParticle.bind(null, me, PROTON_RADIUS, 'proton.svg'));
+  neutrons.forEach(renderParticle.bind(null, me, NEUTRON_RADIUS, 'neutron.svg'));
 
   // Draw all players
   renderPlayer(me, me);
@@ -75,7 +75,7 @@ function renderPlayer(me, player) {
   context.save();
   context.translate(canvasX, canvasY);
   context.lineWidth = 3;
-  context.fillStyle = 'blue';
+  context.fillStyle = 'white';
   context.beginPath();
   context.arc(0, 0,
     playerRadius,
@@ -98,10 +98,10 @@ function renderPlayer(me, player) {
   context.restore();
 }
 
-function renderParticle(me, radius, particle) {
+function renderParticle(me, radius, asset, particle) {
   const { x, y } = particle;
   context.drawImage(
-    getAsset('electron.svg'),
+    getAsset(asset),
     canvas.width / 2 + x - me.x - radius,
     canvas.height / 2 + y - me.y - radius,
     radius * 2,

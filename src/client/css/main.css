@@ -70,23 +70,32 @@ button:focus {
   outline: none;
 }
 
-#leaderboard {
-  position: fixed;
-  top: 10px;
-  right: 10px;
+.board {
   background-color: rgba(255, 255, 255, 0.5);
   padding: 10px;
   border-radius: 5px;
 }
 
-#leaderboard th {
+.board th {
   text-align: center;
   padding: 2px 5px;
 }
 
-#leaderboard td {
+.board td {
   text-align: center;
   padding: 2px 5px;
+}
+
+#leaderboard {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+#infoboard {
+  position: fixed;
+  top: 10px;
+  left: 10px;
 }
 
 #disconnect-modal {
