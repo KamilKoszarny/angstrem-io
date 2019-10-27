@@ -65,7 +65,7 @@ class Game {
     Object.keys(this.sockets).forEach(playerID => {
       const socket = this.sockets[playerID];
       const player = this.players[playerID];
-      if (player.mass <= 0) {
+      if (player.atomicNumber === Constants.ELEMENTS.length + 1) {
         socket.emit(Constants.MSG_TYPES.GAME_OVER);
         this.removePlayer(socket);
       }

@@ -20,9 +20,11 @@ module.exports = Object.freeze({
   NEUTRONS_MAX_COUNT: 15,
 
   ELEMENTS: [
-    new Element(1, 'Hydrogen', 'H'),
-    new Element(2, 'Helium', 'He'),
-    new Element(3, 'Lithium', 'Li'),
+    new Element(1, 'Hydrogen', 'H', 'White'),
+    new Element(2, 'Helium', 'He', 'LightCyan'),
+    new Element(3, 'Lithium', 'Li', 'MediumOrchid'),
+    new Element(4, 'Beryllium', 'Be', 'YellowGreen'),
+    new Element(5, 'Boron', 'B', 'LightSalmon'),
   ],
 
   MAP_SIZE: 3000,

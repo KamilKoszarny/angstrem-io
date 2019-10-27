@@ -1,10 +1,11 @@
 // Learn more about this file at:
 // https://victorzhou.com/blog/build-an-io-game-part-1/#5-client-rendering
 import { debounce } from 'throttle-debounce';
-import { getAsset } from './assets';
-import { getCurrentState } from './state';
+import { getAsset } from '../assets';
+import { getCurrentState } from '../state';
 
-const Constants = require('../shared/constants');
+const Constants = require('../../shared/constants');
+const RenderUtils = require('./renderUtils');
 
 const { PLAYER_BASE_RADIUS, ELECTRON_RADIUS, PROTON_RADIUS, NEUTRON_RADIUS, MAP_SIZE } = Constants;
 
@@ -75,13 +76,19 @@ function renderPlayer(me, player) {
   context.save();
   context.translate(canvasX, canvasY);
   context.lineWidth = 3;
-  context.fillStyle = 'white';
+  context.fillStyle = player.element.color;
   context.beginPath();
   context.arc(0, 0,
     playerRadius,
     0, 2 * Math.PI);
   context.stroke();
   context.fill();
+
+  context.font = `${playerRadius}px Arial`;
+  context.fillStyle = RenderUtils.invertColor(player.element.color, true);
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(player.element.symbol, 0, 0);
 
   // Draw player direction
   context.rotate(direction);
