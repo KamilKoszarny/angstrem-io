@@ -1,3 +1,5 @@
+const Element = require('./element');
+
 module.exports = Object.freeze({
   PLAYER_BASE_RADIUS: 10,
   ELECTRON_RADIUS: 3,
@@ -16,6 +18,12 @@ module.exports = Object.freeze({
   ELECTRONS_MAX_COUNT: 50,
   PROTONS_MAX_COUNT: 20,
   NEUTRONS_MAX_COUNT: 15,
+
+  ELEMENTS: [
+    new Element(1, 'Hydrogen', 'H'),
+    new Element(2, 'Helium', 'He'),
+    new Element(3, 'Lithium', 'Li'),
+  ],
 
   MAP_SIZE: 3000,
   MSG_TYPES: {

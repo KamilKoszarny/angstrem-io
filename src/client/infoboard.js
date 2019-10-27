@@ -3,7 +3,10 @@ const infoboard = document.getElementById('infoboard');
 let username = '';
 
 export function updateInfoboard(data, me) {
-  infoboard.getElementsByClassName('playerName')[0].textContent = username;
+  infoboard.getElementsByClassName('name')[0].textContent = username;
+  infoboard.getElementsByClassName('element')[0].textContent = me.element.name;
+  infoboard.getElementsByClassName('mass')[0].textContent = me.mass;
+  infoboard.getElementsByClassName('charge')[0].textContent = me.charge;
 }
 
 export function setInfoboardHidden(hidden) {

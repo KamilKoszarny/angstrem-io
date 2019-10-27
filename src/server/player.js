@@ -1,7 +1,7 @@
 const ObjectClass = require('./object');
 const Constants = require('../shared/constants');
 
-const { PLAYER_BASE_RADIUS } = Constants;
+const { PLAYER_BASE_RADIUS, ELEMENTS } = Constants;
 
 class Player extends ObjectClass {
   constructor(id, username, x, y) {
@@ -9,6 +9,7 @@ class Player extends ObjectClass {
     this.username = username;
     this.mass = 1;
     this.atomicNumber = 1;
+    this.element = ELEMENTS[this.atomicNumber - 1];
     this.charge = 0;
     this.score = 0;
   }
@@ -35,6 +36,7 @@ class Player extends ObjectClass {
         this.charge += 1;
         this.mass += 1;
         this.atomicNumber += 1;
+        this.element = ELEMENTS[this.atomicNumber - 1];
         break;
       case 'neutrons':
         this.score += Constants.SCORE_NEUTRON_CATCH;
@@ -49,6 +51,8 @@ class Player extends ObjectClass {
       ...(super.serializeForUpdate()),
       direction: this.direction,
       mass: this.mass,
+      element: this.element,
+      charge: this.charge,
     };
   }
 
