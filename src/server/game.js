@@ -29,9 +29,9 @@ class Game {
     delete this.players[socket.id];
   }
 
-  handleInput(socket, dir) {
+  handleInput(socket, xMouseDistRatio, yMouseDistRatio) {
     if (this.players[socket.id]) {
-      this.players[socket.id].setDirection(dir);
+      this.players[socket.id].setMouseForce(xMouseDistRatio, yMouseDistRatio);
     }
   }
 

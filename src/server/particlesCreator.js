@@ -15,24 +15,24 @@ class ParticlesCreator {
 
   static createElectron(electrons) {
     if (electrons.length < Constants.ELECTRONS_MAX_COUNT) {
-      const { x, y, direction } = this.generateCoords();
-      return new Electron(x, y, direction);
+      const { x, y } = this.generateCoords();
+      return new Electron(x, y);
     }
     return null;
   }
 
   static createProton(protons) {
     if (protons.length < Constants.PROTONS_MAX_COUNT) {
-      const { x, y, direction } = this.generateCoords();
-      return new Proton(x, y, direction);
+      const { x, y } = this.generateCoords();
+      return new Proton(x, y);
     }
     return null;
   }
 
   static createNeutron(neurtons) {
-    if (neurtons.length < Constants.NEUTRON_MAX_SPEED) {
-      const { x, y, direction } = this.generateCoords();
-      return new Neutron(x, y, direction);
+    if (neurtons.length < Constants.NEUTRON_MAX_X_SPEED) {
+      const { x, y } = this.generateCoords();
+      return new Neutron(x, y);
     }
     return null;
   }
@@ -40,8 +40,7 @@ class ParticlesCreator {
   static generateCoords() {
     const x = Constants.MAP_SIZE * Math.random();
     const y = Constants.MAP_SIZE * Math.random();
-    const direction = Math.random() * 2 * Math.PI;
-    return { x, y, direction };
+    return { x, y };
   }
 }
 

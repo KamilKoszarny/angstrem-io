@@ -2,6 +2,8 @@
 // https://victorzhou.com/blog/build-an-io-game-part-1/#6-client-input-%EF%B8%8F
 import { updateDirection } from './networking';
 
+const Utils = require('../shared/utils');
+
 function onMouseInput(e) {
   handleInput(e.clientX, e.clientY);
 }
@@ -12,8 +14,17 @@ function onTouchInput(e) {
 }
 
 function handleInput(x, y) {
-  const dir = Math.atan2(x - window.innerWidth / 2, window.innerHeight / 2 - y);
-  updateDirection(dir);
+  const visibleRadius = Math.min(window.innerWidth, window.innerHeight) / 2;
+  const xMouseDist = (x - window.innerWidth / 2);
+  const yMouseDist = (y - window.innerHeight / 2);
+  const mouseDistance = Utils.distanceD(xMouseDist, yMouseDist);
+  let xMouseDistRatio = xMouseDist / visibleRadius;
+  let yMouseDistRatio = yMouseDist / visibleRadius;
+  if (mouseDistance > visibleRadius) {
+    xMouseDistRatio *= visibleRadius / mouseDistance;
+    yMouseDistRatio *= visibleRadius / mouseDistance;
+  }
+  updateDirection(xMouseDistRatio, yMouseDistRatio);
 }
 
 export function startCapturingInput() {

@@ -3,8 +3,8 @@ const ObjectClass = require('./object');
 const Constants = require('../shared/constants');
 
 class Proton extends ObjectClass {
-  constructor(x, y, dir) {
-    super(shortid(), x, y, dir, Constants.PROTON_MAX_SPEED);
+  constructor(x, y) {
+    super(shortid(), x, y, Constants.PROTON_MAX_X_SPEED);
   }
 
   // Returns true if should be destroyed
