@@ -15,20 +15,16 @@ module.exports = Object.freeze({
   SCORE_PROTON_CATCH: 5,
   SCORE_NEUTRON_CATCH: 3,
 
-  ELECTRONS_MAX_COUNT: 50,
-  PROTONS_MAX_COUNT: 20,
-  NEUTRONS_MAX_COUNT: 15,
+  ELECTRONS_MAX_COUNT: 30,
+  PROTONS_MAX_COUNT: 30,
+  NEUTRONS_MAX_COUNT: 30,
 
-  MOUSE_FORCE: 500,
-  MOUSE_FORCE_DIVIDER: 50,
+  MOUSE_FORCE: 10,
+  CHARGE_FORCE: 100,
+  CHARGE_FORCE_MAX_DIST: 1000,
 
-  ELEMENTS: [
-    new Element(1, 'Hydrogen', 'H', 'White'),
-    new Element(2, 'Helium', 'He', 'LightCyan'),
-    new Element(3, 'Lithium', 'Li', 'MediumOrchid'),
-    new Element(4, 'Beryllium', 'Be', 'YellowGreen'),
-    new Element(5, 'Boron', 'B', 'LightSalmon'),
-  ],
+  COLLISION_SPEED_DROP: 0.8,
+  PLAYER_SPEED_WASTE: 0.99,
 
   MAP_SIZE: 3000,
   MSG_TYPES: {
@@ -37,4 +33,12 @@ module.exports = Object.freeze({
     INPUT: 'input',
     GAME_OVER: 'dead',
   },
+
+  ELEMENTS: [
+    new Element(1, 'Hydrogen', 'H', 'White'),
+    new Element(2, 'Helium', 'He', 'LightCyan'),
+    new Element(3, 'Lithium', 'Li', 'MediumOrchid'),
+    new Element(4, 'Beryllium', 'Be', 'YellowGreen'),
+    new Element(5, 'Boron', 'B', 'LightSalmon'),
+  ],
 });

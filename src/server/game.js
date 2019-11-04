@@ -1,6 +1,7 @@
 const Constants = require('../shared/constants');
 const Player = require('./player');
 const applyCollisions = require('./collisions');
+const applyForces = require('./forces');
 const ParticlesCreator = require('./particlesCreator');
 
 class Game {
@@ -60,6 +61,10 @@ class Game {
 
     const caughtNeutrons = applyCollisions(Object.values(this.players), this.neutrons, 'neutrons');
     this.neutrons = this.neutrons.filter(neutron => !caughtNeutrons.includes(neutron));
+
+    applyForces(Object.values(this.players), this.electrons, 'electrons');
+    applyForces(Object.values(this.players), this.protons, 'protons');
+    applyForces(Object.values(this.players), this.neutrons, 'neutrons');
 
     // Check if any players are dead
     Object.keys(this.sockets).forEach(playerID => {

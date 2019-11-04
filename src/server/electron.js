@@ -4,7 +4,7 @@ const Constants = require('../shared/constants');
 
 class Electron extends ObjectClass {
   constructor(x, y) {
-    super(shortid(), x, y, Constants.ELECTRON_MAX_X_SPEED);
+    super(shortid(), x, y, 0.2, -1, Constants.ELECTRON_MAX_X_SPEED);
   }
 
   // Returns true if the electron should be destroyed

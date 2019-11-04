@@ -34,9 +34,26 @@ function render() {
   renderBackground(me.x, me.y);
 
   // Draw boundaries
+  context.save();
   context.strokeStyle = 'black';
-  context.lineWidth = 1;
+  context.lineWidth = 2;
   context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
+
+  // Draw grid
+  context.lineWidth = 0.5;
+  context.setLineDash([10, 10]);
+  context.beginPath();
+  const gridDensity = 10;
+  const gridSize = MAP_SIZE / gridDensity;
+  context.moveTo(canvas.width / 2 - me.x, canvas.height / 2 - me.y + gridSize);
+  for (let i = 1; i < gridDensity; i++) {
+    context.lineTo(canvas.width / 2 - me.x + MAP_SIZE, canvas.height / 2 - me.y + i * gridSize);
+    context.moveTo(canvas.width / 2 - me.x + i * gridSize, canvas.height / 2 - me.y);
+    context.lineTo(canvas.width / 2 - me.x + i * gridSize, canvas.height / 2 - me.y + MAP_SIZE);
+    context.moveTo(canvas.width / 2 - me.x, canvas.height / 2 - me.y + (i + 1) * gridSize);
+  }
+  context.stroke();
+  context.restore();
 
   // Draw all particles
   electrons.forEach(renderParticle.bind(null, me, ELECTRON_RADIUS, 'electron.svg'));

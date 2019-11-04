@@ -10,7 +10,7 @@ function applyCollisions(players, particles, type) {
       const particleRadius = Utils.getPaticleRadius(type);
       if (player.distanceTo(particle) <= player.calcRadius() + particleRadius) {
         destroyedParticles.push(particle);
-        player.catchParticle(type);
+        player.catchParticle(particle, type);
         break;
       }
     }
