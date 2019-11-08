@@ -87,6 +87,13 @@ function interpolateObject(object1, object2, ratio) {
       interpolated[key] = interpolateDirection(object1[key], object2[key], ratio);
     } else if (key === 'element') {
       interpolated[key] = object1[key];
+    } else if (key === 'lines') {
+      const lines1 = object1[key];
+      const lines2 = object2[key];
+      interpolated[key] = [];
+      for (let i = 0; i < Math.min(lines1.length, lines2.length); i++) {
+        interpolated[key].push(interpolateObject(lines1[i], lines2[i], ratio));
+      }
     } else {
       interpolated[key] = object1[key] + (object2[key] - object1[key]) * ratio;
     }

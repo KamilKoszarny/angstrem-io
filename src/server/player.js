@@ -10,13 +10,20 @@ class Player extends ObjectClass {
     this.atomicNumber = 1;
     this.element = ELEMENTS[this.atomicNumber - 1];
     this.score = 0;
+    this.mouseXForce = 0;
+    this.mouseYForce = 0;
+    this.lines = [];
   }
 
   // Returns a newly created electron, or null.
   update(dt) {
+    this.lines = [];
     super.update(dt);
 
-    // Make sure the player stays in bounds
+    this.xSpeed = this.xSpeed + this.mouseXForce / this.mass;
+    this.ySpeed = this.ySpeed + this.mouseYForce / this.mass;
+
+    // Bounce from boundaries
     if (this.x < 0) {
       this.xSpeed = Constants.COLLISION_SPEED_DROP * Math.abs(this.xSpeed);
     } else if (this.x > Constants.MAP_SIZE) {
@@ -33,8 +40,8 @@ class Player extends ObjectClass {
   }
 
   setMouseForce(xMouseDistRatio, yMouseDistRatio) {
-    this.xForce = xMouseDistRatio * MOUSE_FORCE * (this.mass ** 0.5);
-    this.yForce = yMouseDistRatio * MOUSE_FORCE * (this.mass ** 0.5);
+    this.mouseXForce = xMouseDistRatio * MOUSE_FORCE * (this.mass ** 0.5);
+    this.mouseYForce = yMouseDistRatio * MOUSE_FORCE * (this.mass ** 0.5);
   }
 
   catchParticle(particle, type) {
@@ -69,6 +76,7 @@ class Player extends ObjectClass {
       mass: this.mass,
       element: this.element,
       charge: this.charge,
+      lines: this.lines,
     };
   }
 

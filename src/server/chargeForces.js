@@ -1,7 +1,7 @@
 const Constants = require('../shared/constants');
 
 // Returns an array of electrons to be destroyed.
-function applyForces(players, particles, type) {
+function applyChargeForces(players, particles, type) {
   for (let i = 0; i < players.length; i++) {
     for (let j = 0; j < particles.length; j++) {
       const player = players[i];
@@ -17,4 +17,4 @@ function applyForces(players, particles, type) {
   }
 }
 
-module.exports = applyForces;
+module.exports = applyChargeForces;

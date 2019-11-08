@@ -1,4 +1,5 @@
 const Element = require('./element');
+const Reaction = require('./reaction');
 
 module.exports = Object.freeze({
   PLAYER_BASE_RADIUS: 10,
@@ -15,13 +16,15 @@ module.exports = Object.freeze({
   SCORE_PROTON_CATCH: 5,
   SCORE_NEUTRON_CATCH: 3,
 
-  ELECTRONS_MAX_COUNT: 30,
-  PROTONS_MAX_COUNT: 30,
-  NEUTRONS_MAX_COUNT: 30,
+  ELECTRONS_MAX_COUNT: 0,
+  PROTONS_MAX_COUNT: 0,
+  NEUTRONS_MAX_COUNT: 0,
 
   MOUSE_FORCE: 10,
   CHARGE_FORCE: 100,
   CHARGE_FORCE_MAX_DIST: 1000,
+  REACTION_FORCE: 100,
+  REACTION_FORCE_MAX_DIST: 1000,
 
   COLLISION_SPEED_DROP: 0.8,
   PLAYER_SPEED_WASTE: 0.99,
@@ -40,5 +43,9 @@ module.exports = Object.freeze({
     new Element(3, 'Lithium', 'Li', 'MediumOrchid'),
     new Element(4, 'Beryllium', 'Be', 'YellowGreen'),
     new Element(5, 'Boron', 'B', 'LightSalmon'),
+  ],
+
+  REACTIONS: [
+    new Reaction(['Hydrogen', 'Hydrogen'].sort(), 'Dihydrogen'),
   ],
 });

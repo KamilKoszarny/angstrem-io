@@ -14,6 +14,8 @@ const canvas = document.getElementById('game-canvas');
 const context = canvas.getContext('2d');
 setCanvasDimensions();
 
+let forceDashOffset = 0;
+
 function setCanvasDimensions() {
   // On small screens (e.g. phones), we want to "zoom out" so players can still see at least
   // 800 in-game units of width.
@@ -30,35 +32,15 @@ function render() {
     return;
   }
 
-  // Draw background
   renderBackground(me.x, me.y);
-
-  // Draw boundaries
-  context.save();
-  context.strokeStyle = 'black';
-  context.lineWidth = 2;
-  context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
-
-  // Draw grid
-  context.lineWidth = 0.5;
-  context.setLineDash([10, 10]);
-  context.beginPath();
-  const gridDensity = 10;
-  const gridSize = MAP_SIZE / gridDensity;
-  context.moveTo(canvas.width / 2 - me.x, canvas.height / 2 - me.y + gridSize);
-  for (let i = 1; i < gridDensity; i++) {
-    context.lineTo(canvas.width / 2 - me.x + MAP_SIZE, canvas.height / 2 - me.y + i * gridSize);
-    context.moveTo(canvas.width / 2 - me.x + i * gridSize, canvas.height / 2 - me.y);
-    context.lineTo(canvas.width / 2 - me.x + i * gridSize, canvas.height / 2 - me.y + MAP_SIZE);
-    context.moveTo(canvas.width / 2 - me.x, canvas.height / 2 - me.y + (i + 1) * gridSize);
-  }
-  context.stroke();
-  context.restore();
+  renderBoundariesAndGrid(me);
 
   // Draw all particles
   electrons.forEach(renderParticle.bind(null, me, ELECTRON_RADIUS, 'electron.svg'));
   protons.forEach(renderParticle.bind(null, me, PROTON_RADIUS, 'proton.svg'));
   neutrons.forEach(renderParticle.bind(null, me, NEUTRON_RADIUS, 'neutron.svg'));
+
+  renderForceLines(me);
 
   // Draw all players
   renderPlayer(me, me);
@@ -82,16 +64,60 @@ function renderBackground(x, y) {
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-// Renders players atoms at the given coordinates
+function renderBoundariesAndGrid(me) {
+  // Draw boundaries
+  context.save();
+  context.strokeStyle = 'black';
+  context.lineWidth = 2;
+  context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
+
+  // Draw grid
+  context.lineWidth = 0.5;
+  context.setLineDash([10, 10]);
+  context.beginPath();
+  const gridDensity = 10;
+  const gridSize = MAP_SIZE / gridDensity;
+  context.moveTo(canvas.width / 2 - me.x, canvas.height / 2 - me.y + gridSize);
+  for (let i = 1; i < gridDensity; i++) {
+    context.lineTo(canvas.width / 2 - me.x + MAP_SIZE, canvas.height / 2 - me.y + i * gridSize);
+    context.moveTo(canvas.width / 2 - me.x + i * gridSize, canvas.height / 2 - me.y);
+    context.lineTo(canvas.width / 2 - me.x + i * gridSize, canvas.height / 2 - me.y + MAP_SIZE);
+    context.moveTo(canvas.width / 2 - me.x, canvas.height / 2 - me.y + (i + 1) * gridSize);
+  }
+  context.stroke();
+  context.restore();
+}
+
+function renderForceLines(player) {
+  context.save();
+  context.translate(canvas.width / 2, canvas.height / 2);
+  // Draw player force lines
+  for (let i = 0; i < player.lines.length; i++) {
+    const line = player.lines[i];
+    context.lineWidth = Math.min(
+      Constants.REACTION_FORCE_MAX_DIST * Math.abs(line.force) / Constants.REACTION_FORCE / 2,
+      PLAYER_BASE_RADIUS * (player.mass ** 0.33),
+    );
+    context.strokeStyle = line.force > 0 ? 'yellow' : 'green';
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(line.x, line.y);
+    context.stroke();
+  }
+  context.restore();
+}
+
 function renderPlayer(me, player) {
   const { x, y, direction } = player;
+  const playerRadius = PLAYER_BASE_RADIUS * (player.mass ** 0.33);
   const canvasX = canvas.width / 2 + x - me.x;
   const canvasY = canvas.height / 2 + y - me.y;
 
-  // Draw player atom
-  const playerRadius = PLAYER_BASE_RADIUS * (player.mass ** 0.33);
   context.save();
   context.translate(canvasX, canvasY);
+
+  // Draw player atom
+  context.strokeStyle = 'black';
   context.lineWidth = 3;
   context.fillStyle = player.element.color;
   context.beginPath();
@@ -101,11 +127,13 @@ function renderPlayer(me, player) {
   context.stroke();
   context.fill();
 
-  context.font = `${playerRadius}px Arial`;
   context.fillStyle = RenderUtils.invertColor(player.element.color, true);
+  context.font = `${playerRadius}px Arial`;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
   context.fillText(player.element.symbol, 0, 0);
+  context.font = `${playerRadius / 2}px Arial`;
+  context.fillText(Math.floor(player.charge).toString(), playerRadius / 2, -playerRadius / 2);
 
   // Draw player direction
   context.rotate(direction);
