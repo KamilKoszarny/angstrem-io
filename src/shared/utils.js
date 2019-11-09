@@ -17,6 +17,21 @@ class Utils {
   static distanceD(dx, dy) {
     return Math.sqrt((dx ** 2) + (dy ** 2));
   }
+
+  // assume uniqueness
+  static makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
+  static equalsJSON(o1, o2) {
+    return JSON.stringify(o1) === JSON.stringify(o2);
+  }
 }
 
 module.exports = Utils;

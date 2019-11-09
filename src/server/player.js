@@ -9,6 +9,7 @@ class Player extends ObjectClass {
     this.username = username;
     this.atomicNumber = 1;
     this.element = ELEMENTS[this.atomicNumber - 1];
+    this.molecule = null;
     this.score = 0;
     this.mouseXForce = 0;
     this.mouseYForce = 0;
@@ -75,6 +76,7 @@ class Player extends ObjectClass {
       direction: this.calcDirection(),
       mass: this.mass,
       element: this.element,
+      molecule: this.molecule,
       charge: this.charge,
       lines: this.lines,
     };

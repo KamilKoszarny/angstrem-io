@@ -14,8 +14,6 @@ const canvas = document.getElementById('game-canvas');
 const context = canvas.getContext('2d');
 setCanvasDimensions();
 
-let forceDashOffset = 0;
-
 function setCanvasDimensions() {
   // On small screens (e.g. phones), we want to "zoom out" so players can still see at least
   // 800 in-game units of width.
@@ -35,14 +33,13 @@ function render() {
   renderBackground(me.x, me.y);
   renderBoundariesAndGrid(me);
 
-  // Draw all particles
   electrons.forEach(renderParticle.bind(null, me, ELECTRON_RADIUS, 'electron.svg'));
   protons.forEach(renderParticle.bind(null, me, PROTON_RADIUS, 'proton.svg'));
   neutrons.forEach(renderParticle.bind(null, me, NEUTRON_RADIUS, 'neutron.svg'));
 
-  renderForceLines(me);
+  renderForceLines(me, me);
+  others.forEach(renderForceLines.bind(null, me));
 
-  // Draw all players
   renderPlayer(me, me);
   others.forEach(renderPlayer.bind(null, me));
 }
@@ -88,10 +85,12 @@ function renderBoundariesAndGrid(me) {
   context.restore();
 }
 
-function renderForceLines(player) {
+function renderForceLines(me, player) {
+  const { x, y } = player;
+  const canvasX = canvas.width / 2 + x - me.x;
+  const canvasY = canvas.height / 2 + y - me.y;
   context.save();
-  context.translate(canvas.width / 2, canvas.height / 2);
-  // Draw player force lines
+  context.translate(canvasX, canvasY);
   for (let i = 0; i < player.lines.length; i++) {
     const line = player.lines[i];
     context.lineWidth = Math.min(

@@ -16,15 +16,16 @@ module.exports = Object.freeze({
   SCORE_PROTON_CATCH: 5,
   SCORE_NEUTRON_CATCH: 3,
 
-  ELECTRONS_MAX_COUNT: 0,
-  PROTONS_MAX_COUNT: 0,
-  NEUTRONS_MAX_COUNT: 0,
+  ELECTRONS_MAX_COUNT: 30,
+  PROTONS_MAX_COUNT: 30,
+  NEUTRONS_MAX_COUNT: 30,
 
   MOUSE_FORCE: 10,
-  CHARGE_FORCE: 100,
+  CHARGE_FORCE: 150,
   CHARGE_FORCE_MAX_DIST: 1000,
-  REACTION_FORCE: 100,
-  REACTION_FORCE_MAX_DIST: 1000,
+  REACTION_FORCE: 2500,
+  REACTION_FORCE_MIN_DIST: 30,
+  REACTION_FORCE_MAX_DIST: 200,
 
   COLLISION_SPEED_DROP: 0.8,
   PLAYER_SPEED_WASTE: 0.99,
@@ -46,6 +47,6 @@ module.exports = Object.freeze({
   ],
 
   REACTIONS: [
-    new Reaction(['Hydrogen', 'Hydrogen'].sort(), 'Dihydrogen'),
+    new Reaction(['Hydrogen', 'Hydrogen'].sort(), ['Dihydrogen']),
   ],
 });
